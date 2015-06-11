@@ -1,10 +1,4 @@
 class wordpress {
-  File {
-    owner => $httpd_user,
-    group => $httpd_group,
-    mode  => '0644',
-  }
-
   case $::osfamily {
     'RedHat': {
        $httpd_user     = 'apache'
@@ -33,6 +27,12 @@ class wordpress {
     default: {
       fail("Module ${module_name} is not supported on ${::osfamily}")
     }
+  }
+
+  File {
+    owner => $httpd_user,
+    group => $httpd_group,
+    mode  => '0644',
   }
 
   package { $mysql_packages:
