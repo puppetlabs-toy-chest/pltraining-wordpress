@@ -1,8 +1,6 @@
 class wordpress {
   case $::osfamily {
     'RedHat': {
-       $httpd_user     = 'apache'
-       $httpd_group    = 'apache'
        $httpd_pkg      = 'httpd'
        $httpd_svc      = 'httpd'
        $httpd_conf     = 'httpd.conf'
@@ -13,8 +11,6 @@ class wordpress {
        $php_packages   = [ 'php', 'php-mysql', 'php-gd' ]
     }
     'Debian': {
-       $httpd_user     = 'www-data'
-       $httpd_group    = 'www-data'
        $httpd_pkg      = 'apache2'
        $httpd_svc      = 'apache2'
        $httpd_conf     = 'apache2.conf'
@@ -30,8 +26,8 @@ class wordpress {
   }
 
   File {
-    owner => $httpd_user,
-    group => $httpd_group,
+    owner => 'root',
+    group => 'root',
     mode  => '0644',
   }
 
@@ -50,8 +46,6 @@ class wordpress {
   file { $httpd_conf:
     ensure  => file,
     path    => "${httpd_confdir}/${httpd_conf}",
-    owner   => 'root',
-    group   => 'root',
     source  => "puppet:///modules/wordpress/${httpd_conf}",
     require => Package[$httpd_pkg],
   }
